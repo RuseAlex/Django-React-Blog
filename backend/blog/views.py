@@ -10,7 +10,7 @@ from .permissions import PostDestroyPermission
 class PostListView(ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = PostListSerializer
-    queryset = Post.objects.order_by('-created_at')
+    queryset = Post.objects.order_by('-created_at').prefetch_related('author')
     pagination_class = FasterPageNumberPagination
 
     def perform_create(self, serializer):
@@ -32,4 +32,4 @@ class CommentCreationView(CreateAPIView):
 class PostDetailView(RetrieveDestroyAPIView):
     permission_classes = [PostDestroyPermission, ]
     serializer_class = PostDetailSerializer
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().prefetch_related('author')
